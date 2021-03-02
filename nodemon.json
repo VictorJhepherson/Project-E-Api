@@ -1,0 +1,12 @@
+{
+    "env":{
+        "MYSQL_USER": "ADMIN",
+        "MYSQL_PSW": "ADMIN",
+        "MYSQL_DATABASE": "PROJETO_E",
+        "MYSQL_HOST": "localhost",
+        "MYSQL_PORT": 3306,
+
+        "JWT_KEY": "KeyProjectEApi#374",
+        "URL_API": "http://localhost:6000/"
+    }
+}
