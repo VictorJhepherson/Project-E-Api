@@ -88,8 +88,7 @@ exports.registerUsers = (req, res, next) => {
                             let token = jwt.sign({ SU_LOGINNAME: req.body.SU_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });  
                             return res.status(201).send({
                                 mensagem: 'Usuário criado com sucesso',
-                                token: token,
-                                USR_ID: result.insertId
+                                token: token
                             });
                         }
                     )
