@@ -67,7 +67,7 @@ exports.refresh = (req, res, next) => {
 exports.registerUsers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error}) }
-        conn.query('SELECT * FROM SYSTEMUSERS WHERE SU_LOGINNAME = ?', [req.body.SU_LOGINNAME], (error, results) => {
+        conn.query('SELECT SU_LOGINNAME FROM SYSTEMUSERS WHERE SU_LOGINNAME = ?', [req.body.SU_LOGINNAME], (error, results) => {
             if(error) { return res.status(500).send({ error: error }) }
             if(results.length > 0){
                 res.status(409).send({ mensagem: 'Usuário já cadastrado'})
@@ -85,11 +85,11 @@ exports.registerUsers = (req, res, next) => {
                             conn.release();
                             if(error) { res.status(500).send({ error: error }) }
 
-                            let token = jwt.sign({ SU_LOGINNAME: results[0].SU_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });  
+                            let token = jwt.sign({ SU_LOGINNAME: req.body.SU_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });  
                             return res.status(201).send({
                                 mensagem: 'Usuário criado com sucesso',
                                 token: token,
-                                data: results[0]
+                                USR_ID: result.insertId
                             });
                         }
                     )
