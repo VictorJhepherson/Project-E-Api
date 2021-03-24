@@ -73,9 +73,9 @@ exports.registerUsers = (req, res, next) => {
                     conn.query(
                         'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?);',
                         [
-                            req.body.USR_NAME, req.body.USR_DATEBIRTHDAY,  
-                            req.body.USR_PHONENUMBER, req.body.USRDOC_CPFNUMBER, 
-                            req.body.USRDOC_RGNUMBER, req.body.USR_LOGINNAME, hash
+                            req.body.USR_NAME, req.body.USR_LOGINNAME, hash, 
+                            req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
+                            req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY
                         ],
                         (error, result, field) => {
                             conn.release();
