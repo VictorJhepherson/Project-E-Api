@@ -35,6 +35,6 @@ router.post('/login', LoginController.login);
 router.post('/logout', login, LoginController.logout);
 router.post('/refresh', login, LoginController.refresh);
 router.post('/register', upload.single('USR_PHOTO'), LoginController.registerUsers);
-router.post('/update', upload.single('USR_PHOTO'), LoginController.updateUsers);
+router.pacth('/update', upload.single('USR_PHOTO'), LoginController.updateUsers);
 
 module.exports = router;
