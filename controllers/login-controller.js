@@ -71,11 +71,12 @@ exports.registerUsers = (req, res, next) => {
                 bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
                     if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
                     conn.query(
-                        'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?);',
+                        'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);',
                         [
                             req.body.USR_NAME, req.body.USR_LOGINNAME, hash, 
                             req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
-                            req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY
+                            req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY,
+                            'https://project-e-api.herokuapp.com/' + req.file.path
                         ],
                         (error, result, field) => {
                             conn.release();
@@ -91,5 +92,28 @@ exports.registerUsers = (req, res, next) => {
                 });
             }
         })
+    });
+};
+
+exports.updateUsers = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error}) }
+        conn.query(
+            'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?)',
+            [
+                req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME,
+                req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
+                req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY,
+                'https://project-e-api.herokuapp.com/' + req.file.path
+            ],
+            (error, result, field) => {
+                conn.release();
+                if(error) { res.status(500).send({ error: error }) }
+
+                res.status(202).send({
+                    mensagem: 'Usuário atualizado com sucesso'
+                });
+            }
+        )
     });
 };
