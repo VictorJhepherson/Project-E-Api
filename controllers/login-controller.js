@@ -55,7 +55,7 @@ exports.refresh = (req, res, next) => {
                 return res.status(200).send({ mensagem: 'Autenticado com sucesso', data: results[0], token: token});
             });
         });
-    } else {
+    } else { 
         return res.status(401).send({ mensagem: 'Falha na autenticação'});
     }
 };
