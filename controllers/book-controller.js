@@ -86,8 +86,6 @@ exports.insertBook = (req, res, next) => {
 exports.updateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-
-        if (err) { throw err; }
         const query = `CALL UPDATE_BOOKS(?, ?, ?, ?, ?)`;
         conn.query(query, 
             [ 
