@@ -119,7 +119,7 @@ exports.updateUsers = (req, res, next) => {
         const params = {
             Bucket: process.env.S3_BUCKET,
             Key: new Date().toISOString() + req.file.originalname, 
-            Body: req.file.buffer
+            Body: req.file.buffer 
         };
     
         S3.upload(params, function(err, data) {
