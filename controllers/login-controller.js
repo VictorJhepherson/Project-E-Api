@@ -85,10 +85,7 @@ exports.registerUsers = (req, res, next) => {
                     if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
 
                     S3.upload(params, function(err, data) {
-                        if (err) {
-                            throw err;
-                        }
-                        console.log(`File uploaded successfully. ${data.Location}`);
+                        if (err) { throw err; }
                         conn.query(
                             'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);',
                             [
@@ -126,10 +123,7 @@ exports.updateUsers = (req, res, next) => {
         };
     
         S3.upload(params, function(err, data) {
-            if (err) {
-                throw err;
-            }
-            console.log(`File uploaded successfully. ${data.Location}`);
+            if (err) { throw err; }
             conn.query(
                 'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?)',
                 [
