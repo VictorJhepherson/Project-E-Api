@@ -35,7 +35,7 @@ exports.getBooksByName = (req, res, next) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
             
-            return res.status(200).send({ data: results[0] });
+            return res.status(200).send({ data: results });
         });
     });
 };
