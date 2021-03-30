@@ -3,7 +3,6 @@ const router = express.Router();
 const mysql = require('../mysql').pool;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 const aws = require('aws-sdk');
 
 const S3 = new aws.S3({
@@ -74,7 +73,7 @@ exports.registerUsers = (req, res, next) => {
         const params = {
             Bucket: process.env.S3_BUCKET,
             Key: new Date().toISOString() + req.file.originalname, 
-            Body: req.file.filename
+            Body: req.file.buffer
         };
 
         conn.query('SELECT USR_LOGINNAME FROM USERS WHERE USR_LOGINNAME = ?', [req.body.USR_LOGINNAME], (error, results) => {
@@ -123,7 +122,7 @@ exports.updateUsers = (req, res, next) => {
         const params = {
             Bucket: process.env.S3_BUCKET,
             Key: new Date().toISOString() + req.file.originalname, 
-            Body: req.file.filename
+            Body: req.file.buffer
         };
     
         S3.upload(params, function(err, data) {
