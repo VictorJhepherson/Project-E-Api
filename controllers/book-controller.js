@@ -28,9 +28,7 @@ exports.getBooks = (req, res, next) => {
 exports.getBooksByName = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        const query = `SELECT * 
-                         FROM BOOKS
-                        WHERE BOOK_NAME LIKE '%?%'`;
+        const query = `CALL GET_BOOKS_BYNAME(?)`;
         conn.query(query, [req.body.BOOK_NAME], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
