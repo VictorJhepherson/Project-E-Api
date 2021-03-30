@@ -30,7 +30,7 @@ exports.getBooksByName = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `SELECT * 
                          FROM BOOKS
-                        WHERE BOOK_NAME LIKE(?)`;
+                        WHERE BOOK_NAME LIKE '%?%'`;
         conn.query(query, [req.body.BOOK_NAME], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
