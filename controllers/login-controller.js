@@ -121,26 +121,29 @@ exports.updateUsers = (req, res, next) => {
             Key: new Date().toISOString() + req.file.originalname, 
             Body: req.file.buffer 
         };
-    
-        S3.upload(params, function(err, data) {
-            if (err) { throw err; }
-            conn.query(
-                'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?)',
-                [
-                    req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME,
-                    req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
-                    req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY,
-                    data.Location
-                ],
-                (error, result, field) => {
-                    conn.release();
-                    if(error) { res.status(500).send({ error: error }) }
-    
-                    res.status(202).send({
-                        mensagem: 'Usuário atualizado com sucesso'
-                    });
-                }
-            )
-        });
+        
+        bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
+            if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
+            S3.upload(params, function(err, data) {
+                if (err) { throw err; }
+                conn.query(
+                    'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                    [
+                        req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME,
+                        hash, req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
+                        req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY,
+                        data.Location
+                    ],
+                    (error, result, field) => {
+                        conn.release();
+                        if(error) { res.status(500).send({ error: error }) }
+        
+                        res.status(202).send({
+                            mensagem: 'Usuário atualizado com sucesso'
+                        });
+                    }
+                )
+            });
+    });
     });
 };
