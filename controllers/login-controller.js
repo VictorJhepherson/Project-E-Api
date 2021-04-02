@@ -23,7 +23,7 @@ exports.login = (req, res, next) => {
                 if (result) {
                     let token = jwt.sign({
                         USR_LOGINNAME: results[0].USR_LOGINNAME
-                    }, process.env.JWT_KEY, {expiresIn: "7d" });
+                    }, process.env.JWT_KEY, {expiresIn: "1m" });
                     return res.status(200).send({ mensagem: 'Autenticado com sucesso', data: results[0], token: token });
                 }
                 return res.status(401).send({ mensagem: 'Falha na autenticação'});
@@ -51,7 +51,7 @@ exports.refresh = (req, res, next) => {
                 if (results.length < 1) {
                     return res.status(401).send({ mensagem: 'Falha na autenticação'});
                 }
-                let token = jwt.sign({ USR_LOGINNAME: results[0].USR_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });
+                let token = jwt.sign({ USR_LOGINNAME: results[0].USR_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "1m" });
                 return res.status(200).send({ mensagem: 'Autenticado com sucesso', data: results[0], token: token});
             });
         });
@@ -84,7 +84,7 @@ exports.registerUsers = (req, res, next) => {
                                 conn.release();
                                 if(error) { res.status(500).send({ error: error }) }
     
-                                let token = jwt.sign({ USR_LOGINNAME: req.body.USR_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });  
+                                let token = jwt.sign({ USR_LOGINNAME: req.body.USR_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "1m" });  
                                 return res.status(201).send({
                                     mensagem: 'Usuário criado com sucesso',
                                     token: token
@@ -100,16 +100,9 @@ exports.registerUsers = (req, res, next) => {
 exports.updateUsers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error}) }
-
-        const params = {
-            Bucket: process.env.S3_BUCKET,
-            Key: new Date().toISOString() + req.file.originalname, 
-            Body: req.file.buffer 
-        };
         
         bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
             if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
-            S3.upload(params, function(err, data) {
                 if (err) { throw err; }
                 conn.query(
                     'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?, ?)',
@@ -128,7 +121,6 @@ exports.updateUsers = (req, res, next) => {
                         });
                     }
                 )
-            });
-    });
+        });
     });
 };
