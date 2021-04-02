@@ -5,9 +5,9 @@ const login = require('../middleware/login');
 
 const LoginController = require('../controllers/login-controller');
 
-const storage = multer.memoryStorage({
+const storage = multer.diskStorage({
     destination: function (req, file, cb){
-        cb(null, '');
+        cb(null, '/userPhotos/');
     },
     filename: function(req, file, cb){
         cb(null, new Date().toISOString() + file.originalname);

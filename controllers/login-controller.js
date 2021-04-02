@@ -3,12 +3,6 @@ const router = express.Router();
 const mysql = require('../mysql').pool;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const aws = require('aws-sdk');
-
-const S3 = new aws.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
 
 exports.login = (req, res, next) => {
     mysql.getConnection((error, conn) => {
@@ -70,12 +64,6 @@ exports.registerUsers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error}) }
 
-        const params = {
-            Bucket: process.env.S3_BUCKET,
-            Key: new Date().toISOString() + req.file.originalname, 
-            Body: req.file.buffer
-        };
-
         conn.query('SELECT USR_LOGINNAME FROM USERS WHERE USR_LOGINNAME = ?', [req.body.USR_LOGINNAME], (error, results) => {
             if(error) { return res.status(500).send({ error: error }) }
             if(results.length > 0){
@@ -84,15 +72,13 @@ exports.registerUsers = (req, res, next) => {
                 bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
                     if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
 
-                    S3.upload(params, function(err, data) {
                         if (err) { throw err; }
                         conn.query(
-                            'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);',
+                            'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?);',
                             [
                                 req.body.USR_NAME, req.body.USR_LOGINNAME, hash, 
                                 req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
-                                req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY,
-                                data.Location
+                                req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY
                             ],
                             (error, result, field) => {
                                 conn.release();
@@ -105,7 +91,6 @@ exports.registerUsers = (req, res, next) => {
                                 });
                             }
                         )
-                    });
                 });
             }
         })
