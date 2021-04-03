@@ -88,7 +88,7 @@ exports.registerUsers = (req, res, next) => {
                                     token: token
                                 });
                             }
-                        )
+                        );
                 });
             }
         })
