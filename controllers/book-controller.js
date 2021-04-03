@@ -8,8 +8,7 @@ exports.getBooks = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `SELECT * 
-                         FROM BOOKS
-                        WHERE BOOK_STATUS = d`;
+                         FROM BOOKS`;
         conn.query(query, (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
