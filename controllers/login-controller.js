@@ -71,8 +71,6 @@ exports.registerUsers = (req, res, next) => {
             } else {
                 bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
                     if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
-
-                        if (err) { throw err; }
                         conn.query(
                             'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?);',
                             [
@@ -103,7 +101,6 @@ exports.updateUsers = (req, res, next) => {
         
         bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
             if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
-                if (err) { throw err; }
                 conn.query(
                     'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?, ?)',
                     [

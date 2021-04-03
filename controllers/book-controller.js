@@ -50,8 +50,6 @@ exports.getBooksById = (req, res, next) => {
 exports.insertBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-
-            if (err) { throw err; }
             const query = `CALL INSERT_BOOKS(?, ?, ?, ?)`;
             conn.query(query, 
                 [ 
@@ -89,8 +87,6 @@ exports.updateBook = (req, res, next) => {
 exports.deleteBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-
-        if (err) { throw err; }
         const query = `DELETE FROM BOOKS WHERE BOOK_ID = ?`;
         conn.query(query, [req.params.BOOK_ID], (error, results, fields) => {
             conn.release();
