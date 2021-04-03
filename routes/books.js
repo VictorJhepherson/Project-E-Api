@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const login = require('../middleware/login');
 
 const BookController = require('../controllers/book-controller');
 
@@ -29,11 +30,11 @@ const upload = multer({
     fileFilter: fileFilter 
 });
 
-router.get('/', BookController.getBooks);
-router.post('/byName', BookController.getBooksByName);
+router.get('/', login, BookController.getBooks);
+router.post('/byName', login, BookController.getBooksByName);
 router.post('/', upload.single('BOOK_IMAGE'), BookController.insertBook);
-router.get('/:BOOK_ID', BookController.getBooksById);
-router.patch('/:BOOK_ID', BookController.updateBook);
-router.delete('/:BOOK_ID', BookController.deleteBook);
+router.get('/:BOOK_ID', login, BookController.getBooksById);
+router.patch('/:BOOK_ID', login, BookController.updateBook);
+router.delete('/:BOOK_ID', login, BookController.deleteBook);
 
 module.exports = router;
