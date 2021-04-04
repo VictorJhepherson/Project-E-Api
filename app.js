@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const rotaLogin = require('./routes/login');
 const rotaBook = require('./routes/books');
+const rotaUser = require('./routes/users');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 app.use('/auth', rotaLogin);
 app.use('/book', rotaBook);
+app.use('/user', rotaUser);
 
 app.use((req, res, next) =>{
     const erro = new Error('Não encontrado');
