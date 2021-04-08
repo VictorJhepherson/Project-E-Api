@@ -65,7 +65,7 @@ exports.insertBook = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         const params = {
             Bucket: process.env.S3_BUCKET_BOOK,
-            Key: req.body.BOOK_NAME + '-' + req.file.originalname, 
+            Key: req.body.BOOK_NAME + '-' + new Date().toISOString(), 
             Body: req.file.buffer
         };
 
