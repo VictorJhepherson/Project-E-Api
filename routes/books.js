@@ -5,9 +5,9 @@ const login = require('../middleware/login');
 
 const BookController = require('../controllers/book-controller');
 
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage({
     destination: function (req, file, cb){
-        cb(null, './bookPhotos/');
+        cb(null, '');
     },
     filename: function(req, file, cb){
         cb(null, new Date().toISOString() + file.originalname);
