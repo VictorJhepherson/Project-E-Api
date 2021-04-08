@@ -41,7 +41,8 @@ exports.getLocates = (req, res, next) => {
                               USERS.USR_NAME,
                               USERS.USR_ID,
                               BOOKS.BOOK_NAME,
-                              BOOKS.BOOK_ID 
+                              BOOKS.BOOK_ID,
+                              BOOKS.BOOK_PATH 
                          FROM LEASED
                         INNER JOIN USERS
                            ON USERS.USR_ID = LEASED.USR_ID
