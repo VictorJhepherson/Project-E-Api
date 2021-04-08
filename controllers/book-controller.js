@@ -63,20 +63,12 @@ exports.getBooksById = (req, res, next) => {
 exports.insertBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        const params = {
-            Bucket: process.env.S3_BUCKET_BOOK,
-            Key: req.body.BOOK_NAME + '-' + new Date().toISOString(), 
-            Body: req.file.buffer
-        };
-
-        S3.upload(params, function(err, data) {
-            if (err) { throw err; }
             const query = `CALL INSERT_BOOKS(?, ?, ?, ?, ?, ?)`;
             conn.query(query, 
                 [ 
                     req.body.BOOK_NAME, req.body.BOOK_STATUS,
                     req.body.BOOK_DESC, req.body.BOOK_GEN,
-                    req.body.BOOK_AUTHOR, data.Location
+                    req.body.BOOK_AUTHOR, req.body.BOOK_PATH
                 ], 
                 (error, results, fields) => {
                 conn.release();
@@ -84,27 +76,19 @@ exports.insertBook = (req, res, next) => {
                 
                 return res.status(200).send({ mensagem: "Livro inserido com sucesso" });
             });
-        });
     });
 };
 
 exports.updateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        const params = {
-            Bucket: process.env.S3_BUCKET_BOOK,
-            Key: req.body.BOOK_NAME + '-' + req.file.originalname, 
-            Body: req.file.buffer
-        };
-        S3.upload(params, function(err, data) {
-            if (err) { throw err; }
             const query = `CALL UPDATE_BOOKS(?, ?, ?, ?, ?, ?, ?)`;
             conn.query(query, 
                 [ 
                     req.params.BOOK_ID, req.body.BOOK_NAME, 
                     req.body.BOOK_STATUS, req.body.BOOK_DESC, 
                     req.body.BOOK_GEN, req.body.BOOK_AUTHOR,
-                    data.Location
+                    req.body.BOOK_PATH
                 ], 
                 (error, results, fields) => {
                 conn.release();
@@ -112,7 +96,6 @@ exports.updateBook = (req, res, next) => {
                 
                 return res.status(200).send({ mensagem: 'Livro atualizado com sucesso' });
             });
-        });
     });
 };
 

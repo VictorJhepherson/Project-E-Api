@@ -32,7 +32,7 @@ const upload = multer({
 
 router.get('/', login, BookController.getBooks);
 router.post('/byName', login, BookController.getBooksByName);
-router.post('/', upload.single('BOOK_PATH'), BookController.insertBook);
+router.post('/', BookController.insertBook);
 router.get('/:BOOK_ID', login, BookController.getBooksById);
 router.patch('/:BOOK_ID', login, BookController.updateBook);
 router.delete('/:BOOK_ID', login, BookController.deleteBook);
