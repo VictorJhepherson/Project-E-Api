@@ -71,12 +71,12 @@ exports.insertBook = (req, res, next) => {
 
         S3.upload(params, function(err, data) {
             if (err) { throw err; }
-            const query = `CALL INSERT_BOOKS(?, ?, ?, ?, ?)`;
+            const query = `CALL INSERT_BOOKS(?, ?, ?, ?, ?, ?)`;
             conn.query(query, 
                 [ 
                     req.body.BOOK_NAME, req.body.BOOK_STATUS,
-                    req.body.BOOK_DESC, req.body.BOOK_GEN, 
-                    data.Location
+                    req.body.BOOK_DESC, req.body.BOOK_GEN,
+                    req.body.BOOK_AUTHOR, data.Location
                 ], 
                 (error, results, fields) => {
                 conn.release();
@@ -98,12 +98,13 @@ exports.updateBook = (req, res, next) => {
         };
         S3.upload(params, function(err, data) {
             if (err) { throw err; }
-            const query = `CALL UPDATE_BOOKS(?, ?, ?, ?, ?, ?)`;
+            const query = `CALL UPDATE_BOOKS(?, ?, ?, ?, ?, ?, ?)`;
             conn.query(query, 
                 [ 
                     req.params.BOOK_ID, req.body.BOOK_NAME, 
                     req.body.BOOK_STATUS, req.body.BOOK_DESC, 
-                    req.body.BOOK_GEN, data.Location
+                    req.body.BOOK_GEN, req.body.BOOK_AUTHOR,
+                    data.Location
                 ], 
                 (error, results, fields) => {
                 conn.release();

@@ -122,7 +122,7 @@ exports.updateUsers = (req, res, next) => {
             S3.upload(params, function(err, data) {
                 if (err) { throw err; }
                 conn.query(
-                    'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?)',
+                    'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?, ?)',
                     [
                         req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME,
                         hash, req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
