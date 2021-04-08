@@ -18,3 +18,16 @@ exports.getUserById = (req, res, next) => {
         });
     });
 };
+
+exports.locateBook = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error }) }
+        const query = `CALL LOCATE_BOOK(?, ?, ?)`;
+        conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, results, fields) => {
+            conn.release();
+            if(error) { return res.status(500).send({ error: error }) }
+            
+            return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
+        });
+    });
+};
