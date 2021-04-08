@@ -8,8 +8,8 @@
 
         "JWT_KEY": "KeyProjectEApi#374",
         "URL_API": "https://project-e-api.herokuapp.com/",
-        "AWS_ACCESS_KEY_ID": "AKIAZDVQVOBJZEEXUPPS",
-        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_ACCESS_KEY_ID": "",
+        "AWS_SECRET_ACCESS_KEY": "",
         "S3_BUCKET": "project-e-userphotos",
         "S3_BUCKET_BOOK": "project-e-bookphotos"
     }
