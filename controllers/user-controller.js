@@ -22,11 +22,10 @@ exports.getUserById = (req, res, next) => {
 exports.locateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        let out_value = 0;
+        let out_value;
         conn.query('CALL VERIFY_LOCATE(?, @?)', [req.body.user, out_value], (error, results) => {
-            console.log(results);
             console.log(out_value);
-            if(results < 3) {
+            if(out_value < 3) {
                 const query = `CALL LOCATE_BOOK(?, ?, ?)`;
                 conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
                     conn.release();
