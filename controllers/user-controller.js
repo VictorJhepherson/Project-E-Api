@@ -22,13 +22,19 @@ exports.getUserById = (req, res, next) => {
 exports.locateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        const query = `CALL LOCATE_BOOK(?, ?, ?)`;
-        conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, results, fields) => {
-            conn.release();
-            if(error) { return res.status(500).send({ error: error }) }
+        conn.query('CALL VERIFY_LOCATE(?)', [req.body.user], (error, results) => {
+            if(results < 3) {
+                const query = `CALL LOCATE_BOOK(?, ?, ?)`;
+                conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
+                    conn.release();
+                    if(error) { return res.status(500).send({ error: error }) }
             
-            return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
-        });
+                    return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
+                });
+            } else {
+                res.status(409).send({ mensagem: 'Você já realizou 3 locações nos ultimos 30 dias desde a primeira locação' })
+            }
+        })
     });
 };
 
