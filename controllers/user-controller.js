@@ -22,24 +22,9 @@ exports.getUserById = (req, res, next) => {
 exports.locateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        conn.query('SELECT MIN(LOC_DATE_RETIRADA) AS LOC_DATE FROM LEASED WHERE USR_ID = ?', [req.body.user], (error, resultado) => {
-            console.log(resultado.LOC_DATE);
-            if(resultado.length > 0) {
-                conn.query(`CALL VERIFY_LOCATE(?, ?)`, [req.body.user, resultado.LOC_DATE], (error, results) => {
-                    console.log(results[0].LOC_ID);
-                    if(results[0].LOC_ID < 3) {
-                        const query = `CALL LOCATE_BOOK(?, ?, ?)`;
-                        conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
-                            conn.release();
-                            if(error) { return res.status(500).send({ error: error }) }
-                    
-                            return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
-                        });
-                    } else {
-                        res.status(409).send({ mensagem: 'Você já realizou 3 locações nos ultimos 30 dias desde a primeira locação' })
-                    }
-                });
-            } else {
+        conn.query(`CALL VERIFY_LOCATE(?, @COUNT_LOC)`, [req.body.user], (error, results) => {
+            console.log(results[0]);
+            if(results[0] < 3) {
                 const query = `CALL LOCATE_BOOK(?, ?, ?)`;
                 conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
                     conn.release();
@@ -47,8 +32,10 @@ exports.locateBook = (req, res, next) => {
             
                     return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
                 });
+            } else {
+                res.status(409).send({ mensagem: 'Você já realizou 3 locações nos ultimos 30 dias desde a primeira locação' })
             }
-        });
+        })
     });
 };
 
