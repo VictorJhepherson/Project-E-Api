@@ -23,7 +23,7 @@ exports.locateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
         let out_value = 0;
-        conn.query('CALL VERIFY_LOCATE(?, ?)', [req.body.user, out_value], (error, results) => {
+        conn.query('CALL VERIFY_LOCATE(?, @?)', [req.body.user, out_value], (error, results) => {
             console.log(results);
             if(results < 3) {
                 const query = `CALL LOCATE_BOOK(?, ?, ?)`;
