@@ -24,20 +24,17 @@ exports.locateBook = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         let COUNT_LOC = 0;
         conn.query(`CALL VERIFY_LOCATE(?, @?)`, [req.body.user, COUNT_LOC], (error, results) => {
-            conn.query('SELECT @COUNT_LOC', (error, out_value) => {
-                console.log(out_value);
-                if(out_value < 3) {
-                    const query = `CALL LOCATE_BOOK(?, ?, ?)`;
-                    conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
-                        conn.release();
-                        if(error) { return res.status(500).send({ error: error }) }
-                
-                        return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
-                    });
-                } else {
-                    res.status(409).send({ mensagem: 'Você já realizou 3 locações nos ultimos 30 dias desde a primeira locação' })
-                }
-            });
+            if(results[0] < 3) {
+                const query = `CALL LOCATE_BOOK(?, ?, ?)`;
+                conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
+                    conn.release();
+                    if(error) { return res.status(500).send({ error: error }) }
+            
+                    return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
+                });
+            } else {
+                res.status(409).send({ mensagem: 'Você já realizou 3 locações nos ultimos 30 dias desde a primeira locação' })
+            }
         })
     });
 };
