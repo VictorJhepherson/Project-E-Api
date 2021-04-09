@@ -24,6 +24,7 @@ exports.locateBook = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         let COUNT_LOC = 0;
         conn.query(`CALL VERIFY_LOCATE(?, @?)`, [req.body.user, COUNT_LOC], (error, results) => {
+            console.log(results[0]);
             if(results[0] < 3) {
                 const query = `CALL LOCATE_BOOK(?, ?, ?)`;
                 conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
