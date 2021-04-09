@@ -23,6 +23,7 @@ exports.locateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
         conn.query('SELECT MIN(LOC_DATE_RETIRADA) FROM LEASED WHERE USR_ID = ?', [req.body.user], (error, resultado) => {
+            console.log(resultado);
             if(resultado.length > 0) {
                 conn.query(`CALL VERIFY_LOCATE(?, ?)`, [req.body.user, resultado], (error, results) => {
                     console.log(results[0]);
