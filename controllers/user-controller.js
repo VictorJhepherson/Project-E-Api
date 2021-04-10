@@ -43,7 +43,7 @@ exports.giveBackBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `CALL GIVE_BACK_BOOK(?, ?)`;
-        conn.query(query, [ req.params.user, req.body.BOOK_ID ], (error, results, fields) => {
+        conn.query(query, [ req.body.user, req.body.BOOK_ID ], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
             
