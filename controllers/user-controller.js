@@ -68,7 +68,8 @@ exports.getLocates = (req, res, next) => {
                            ON USERS.USR_ID = LEASED.USR_ID
                         INNER JOIN BOOKS
                            ON BOOKS.BOOK_ID = LEASED.BOOK_ID
-                        WHERE LEASED.USR_ID = ?`;
+                        WHERE LEASED.USR_ID = ?
+                          AND LEASED.LOC_STATUS = 'l'`;
         conn.query(query, [req.params.user], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
