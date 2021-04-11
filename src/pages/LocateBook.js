@@ -5,6 +5,8 @@ import { View, Text, TouchableOpacity, TextInput, ScrollView, ImageBackground, S
 import Api from '../Api';
 
 import Back from '../assets/back.svg';
+import FavoriteClean from '../assets/favorito-vazio.svg';
+import Favorite from '../assets/favorito.svg';
 import LocateModal from '../components/LocateModal';
 
 export default function LocateBook() {
@@ -12,16 +14,27 @@ export default function LocateBook() {
     const route = useRoute();
 
     const [locateModal, setLocateModal] = useState(false);
+    const [verify, setVerify] = useState(true);
 
     const [bookInfo, setBookInfo] = useState({
         BOOK_ID: route.params.BOOK_ID,
         BOOK_NAME: route.params.BOOK_NAME,
         BOOK_DESC: route.params.BOOK_DESC,
-        BOOK_STATUS: route.params.BOOK_STATUS
+        BOOK_STATUS: route.params.BOOK_STATUS,
+        BOOK_AUTHOR: route.params.BOOK_AUTHOR,
+        BOOK_GEN: route.params.BOOK_GEN
     });
 
     const handleBack = async () => {
         navigation.navigate('Home');
+    };
+
+    const handleFavorite = () => {
+        setVerify(false);
+    };
+
+    const handleFavorite2 = () => {
+        setVerify(true);
     };
 
     const LocateBook = async () => {
@@ -37,10 +50,24 @@ export default function LocateBook() {
             </ImageBackground>
             <View style={styles.infoBook}>
                 <Text style={styles.title}>{bookInfo.BOOK_NAME}</Text>
+                <Text style={styles.textBodyTitleGen}>Genêro:</Text>
+                <Text style={styles.desc}>{bookInfo.BOOK_GEN}</Text>
+                <Text style={styles.textBodyTitleAutor}>Autor:</Text>
+                <Text style={styles.desc}>{bookInfo.BOOK_AUTHOR}</Text>
+                <Text style={styles.textBodyTitle}>Descrição:</Text>
                 <Text style={styles.desc}>{bookInfo.BOOK_DESC}</Text>
                 
             </View>
             <View style={styles.header}>
+                {verify ?
+                    <TouchableOpacity style={styles.back} onPress={handleFavorite}>
+                        <FavoriteClean width="36" height="36" fill="#000000" style={styles.core}/>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity style={styles.back} onPress={handleFavorite2}>
+                        <Favorite width="36" height="36" fill="#000000" style={styles.core}/>
+                    </TouchableOpacity>
+                }
                 {bookInfo.BOOK_STATUS == 'd' ?
                     <TouchableOpacity style={styles.locar} onPress={LocateBook}>
                         <Text style={styles.textLocar}>Locar</Text>
@@ -82,7 +109,10 @@ const styles = StyleSheet.create({
     },
     infoBook: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 30,
+        marginTop: -50,
+        width: 412
     },
     title: {
         fontSize: 24,
@@ -90,7 +120,29 @@ const styles = StyleSheet.create({
         color: '#000',
         marginBottom: 20,
         marginLeft: 10,
-        marginRight: 10
+        marginRight: 10,
+        marginTop: 15
+    },
+    textBodyTitle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        marginRight: 270,
+        marginBottom: 5,
+        marginTop: 5
+    },
+    textBodyTitleGen: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        marginRight: 300,
+        marginBottom: 5,
+        marginTop: 5
+    },
+    textBodyTitleAutor: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        marginRight: 310,
+        marginBottom: 5,
+        marginTop: 5
     },
     desc: {
         fontSize: 17,
@@ -115,7 +167,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 300,
+        width: 350,
         height: 50
+    },
+    core: {
+        marginTop: 160,
+        marginRight: 20,
+        marginLeft: -15
     }
 });

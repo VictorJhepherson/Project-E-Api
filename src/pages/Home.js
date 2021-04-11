@@ -68,6 +68,7 @@ export default function Home({state}) {
                         style={styles.input} 
                         placeholder="Livro..."
                         placeholderTextColor="#FFFFFF"
+                        color="#FFFFFF"
                         value={bookField}
                         onChangeText={t=>setBookField(t)}
                     />

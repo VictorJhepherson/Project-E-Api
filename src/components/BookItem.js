@@ -10,7 +10,9 @@ export default ({data}) => {
             BOOK_ID: data.BOOK_ID,
             BOOK_NAME: data.BOOK_NAME,
             BOOK_DESC: data.BOOK_DESC,
-            BOOK_STATUS: data.BOOK_STATUS
+            BOOK_STATUS: data.BOOK_STATUS,
+            BOOK_AUTHOR: data.BOOK_AUTHOR,
+            BOOK_GEN: data.GEN_NOME
         });
     };
 
@@ -34,7 +36,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderRadius: 20,
         padding: 15,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        minWidth: 350
     },
     infoBook: {
         marginLeft: 20,
