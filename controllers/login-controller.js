@@ -68,23 +68,21 @@ exports.refresh = (req, res, next) => {
 
 exports.registerUsers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
-        if(error) { console.log('1' + req.body); return res.status(500).send({ error: error}) }
+        if(error) { return res.status(500).send({ error: error, mensagem: '1' }) }
         const params = {
             Bucket: process.env.S3_BUCKET,
             Key: new Date().toISOString() + req.file.originalname, 
             Body: req.file.buffer
         };
         conn.query('SELECT USR_LOGINNAME FROM USERS WHERE USR_LOGINNAME = ?', [req.body.USR_LOGINNAME], (error, results) => {
-            if(error) { console.log('2' + req.body); return res.status(500).send({ error: error }) }
+            if(error) { return res.status(500).send({ error: error, mensagem: '2' }) }
             if(results.length > 0){
                 res.status(409).send({ mensagem: 'Usuário já cadastrado'})
             } else {
                 bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
-                    if(errBcrypt){ console.log('3' + req.body); return res.status(500).send({ error: errBcrypt }) }
+                    if(errBcrypt){ return res.status(500).send({ error: errBcrypt, mensagem: '3' }) }
                     S3.upload(params, function(err, data) {
                         if (err) { throw err; }
-                        console.log('4' + req.body);
-                        console.log(data.Location);
                         conn.query(
                             'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);', 
                             [
@@ -95,7 +93,7 @@ exports.registerUsers = (req, res, next) => {
                             ],
                             (error, result, field) => {
                                 conn.release();
-                                if(error) { console.log('5' + req.body); res.status(500).send({ error: error }) }
+                                if(error) { res.status(500).send({ error: error, mensagem: '4' }) }
 
                                 let token = jwt.sign({ USR_LOGINNAME: req.body.USR_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });  
                                 return res.status(201).send({
