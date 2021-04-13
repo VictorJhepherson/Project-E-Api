@@ -71,7 +71,7 @@ exports.registerUsers = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         const params = {
             Bucket: process.env.S3_BUCKET,
-            Key: new Date().toISOString() + req.file.originalname, 
+            Key: new Date().toISOString() + req.file.originalname,  
             Body: req.file.buffer
         };
         conn.query('SELECT USR_LOGINNAME FROM USERS WHERE USR_LOGINNAME = ?', [req.body.USR_LOGINNAME], (error, results) => {
