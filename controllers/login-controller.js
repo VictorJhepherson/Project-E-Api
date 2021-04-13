@@ -68,21 +68,21 @@ exports.refresh = (req, res, next) => {
 
 exports.registerUsers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
-        if(error) { return res.status(500).send({ error: 'conn' }) }
+        if(error) { return res.status(500).send({ error: error }) }
         const params = {
             Bucket: process.env.S3_BUCKET,
             Key: new Date().toISOString() + req.file.originalname, 
             Body: req.file.buffer
         };
         conn.query('SELECT USR_LOGINNAME FROM USERS WHERE USR_LOGINNAME = ?', [req.body.USR_LOGINNAME], (error, results) => {
-            if(error) { return res.status(500).send({ error: 'query' }) }
+            if(error) { return res.status(500).send({ error: error }) }
             if(results.length > 0){
                 res.status(409).send({ mensagem: 'Usuário já cadastrado'})
             } else {
                 bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
-                    if(errBcrypt){ return res.status(500).send({ error: 'crypt' }) }
+                    if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
                     S3.upload(params, function(err, data) {
-                        if (err) { return res.status(500).send({ error: 's3' }) }
+                        if (err) { return res.status(500).send({ error: err }) }
                         conn.query(
                             'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);', 
                             [
@@ -93,7 +93,7 @@ exports.registerUsers = (req, res, next) => {
                             ],
                             (error, result, field) => {
                                 conn.release();
-                                if(error) { res.status(500).send({ error: 'db' }) }
+                                if(error) { res.status(500).send({ error: error }) }
 
                                 let token = jwt.sign({ USR_LOGINNAME: req.body.USR_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });  
                                 return res.status(201).send({
