@@ -84,7 +84,7 @@ exports.registerUsers = (req, res, next) => {
                     S3.upload(params, function(err, data) {
                         if (err) { throw err; }
                         conn.query(
-                            'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);',
+                            'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);', 
                             [
                                 req.body.USR_NAME, req.body.USR_LOGINNAME, hash, 
                                 req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
