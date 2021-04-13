@@ -80,7 +80,7 @@ exports.registerUsers = (req, res, next) => {
                 res.status(409).send({ mensagem: 'Usuário já cadastrado'})
             } else {
                 bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
-                    if(errBcrypt){ console.log('chegou'); return res.status(500).send({ error: errBcrypt }) }
+                    if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
                     S3.upload(params, function(err, data) {
                         if (err) { throw err; }
                         conn.query(
