@@ -10,7 +10,6 @@
         "URL_API": "https://project-e-api.herokuapp.com/",
         "AWS_ACCESS_KEY_ID": "Adicionar chave",
         "AWS_SECRET_ACCESS_KEY": "Adicionar chave secreta ",
-        "S3_BUCKET": "userphotos-e",
-        "S3_BUCKET_BOOK": "books-e"
+        "S3_BUCKET": "project-e-userphoto"
     }
 }
