@@ -8,8 +8,8 @@
 
         "JWT_KEY": "KeyProjectEApi#374",
         "URL_API": "https://project-e-api.herokuapp.com/",
-        "AWS_ACCESS_KEY_ID": "Adicionar chave",
-        "AWS_SECRET_ACCESS_KEY": "Adicionar chave secreta",
+        "AWS_ACCESS_KEY_ID": "AKIASHWSYHI5ZHV2HZN2",
+        "AWS_SECRET_ACCESS_KEY": "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",
         "S3_BUCKET": "userphotos-e",
         "S3_BUCKET_BOOK": "books-e"
     }
