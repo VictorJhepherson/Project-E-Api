@@ -21,7 +21,7 @@ exports.getBookByGen = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `GETBOOK_BYGENRE(?)`;
-        conn.query(query, [ req.params.GEN_NOME ], (error, results, fields) => {
+        conn.query(query, [ req.body.GEN_NOME ], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
             
