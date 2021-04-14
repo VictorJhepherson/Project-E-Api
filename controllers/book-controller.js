@@ -17,6 +17,24 @@ exports.getBooks = (req, res, next) => {
     });
 };
 
+exports.getBookByGen = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error }) }
+        const query = `SELECT * 
+                         FROM BOOKS
+                        INNER JOIN GENRE
+                           ON BOOKS.BOOK_GEN = GENRE.GEN_ID
+                        WHERE GENRE.GEN_NOM = ?
+                          AND BOOKS.BOOK_STATUS = 'd'`;
+        conn.query(query, [ req.params.GEN_NOME ], (error, results, fields) => {
+            conn.release();
+            if(error) { return res.status(500).send({ error: error }) }
+            
+            return res.status(200).send({ data: results[0] });
+        });
+    });
+};
+
 exports.getBooksByName = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
