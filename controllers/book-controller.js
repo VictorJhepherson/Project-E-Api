@@ -20,12 +20,18 @@ exports.getBooks = (req, res, next) => {
 exports.getBookByGen = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        const query = `SELECT * 
+        const query = `SELECT BOOK_ID, 
+                              BOOK_NAME,
+                              BOOK_STATUS,
+                              BOOK_DESC,
+                              BOOK_AUTHOR,
+                              BOOK_PATH
+                              GEN_NOME
                          FROM BOOKS
                         INNER JOIN GENRE
                            ON BOOKS.BOOK_GEN = GENRE.GEN_ID
-                        WHERE GENRE.GEN_NOME = ?
-                          AND BOOKS.BOOK_STATUS = 'd'`;
+                        WHERE GENRE.GEN_NOME = '?'
+                          AND BOOKS.BOOK_STATUS = 'd';`;
         conn.query(query, [ req.params.GEN_NOME ], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
