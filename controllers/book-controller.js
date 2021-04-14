@@ -24,7 +24,7 @@ exports.getBookByGen = (req, res, next) => {
                          FROM BOOKS
                         INNER JOIN GENRE
                            ON BOOKS.BOOK_GEN = GENRE.GEN_ID
-                        WHERE GENRE.GEN_NOM = ?
+                        WHERE GENRE.GEN_NOME = ?
                           AND BOOKS.BOOK_STATUS = 'd'`;
         conn.query(query, [ req.params.GEN_NOME ], (error, results, fields) => {
             conn.release();
