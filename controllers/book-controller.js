@@ -7,17 +7,8 @@ const jwt = require('jsonwebtoken');
 exports.getBooks = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        const query = `SELECT BOOK_ID,
-                              BOOK_NAME,
-                              BOOK_STATUS,
-                              BOOK_DESC,
-                              BOOK_AUTHOR,
-                              GEN_NOME
-                         FROM BOOKS
-                        INNER JOIN GENRE
-                           ON GENRE.GEN_ID = BOOKS.BOOK_GEN
-                        WHERE BOOK_STATUS = 'd'`;
-        conn.query(query, (error, results, fields) => {
+        const query = `CALL GET_BOOKS(?)`;
+        conn.query(query, [ req.body.user ], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
             
