@@ -31,7 +31,7 @@ const upload = multer({
 });
 
 router.get('/:user', login, BookController.getBooks);
-router.post('/byGen/', login, BookController.getBookByGen);
+router.post('/byGen', login, BookController.getBookByGen);
 router.post('/byName', login, BookController.getBooksByName);
 router.post('/', BookController.insertBook);
 router.get('/:BOOK_ID', login, BookController.getBooksById);
