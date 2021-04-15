@@ -30,7 +30,7 @@ exports.locateBook = (req, res, next) => {
                     conn.release();
                     if(error) { return res.status(500).send({ error: error }) }
             
-                    return res.status(200).send({ mensagem: 'Livro locado com sucesso' });
+                    return res.status(200).send({ status: 'Livro locado com sucesso' });
                 });
             } else {
                 res.status(409).send({ mensagem: 'Você já realizou 3 locações nos últimos 30 dias desde a primeira locação' })
