@@ -75,12 +75,11 @@ exports.registerUsers = (req, res, next) => {
                 bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
                     if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
                     conn.query(
-                        'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?, ?);', 
+                        'CALL REGISTER_USERS(?, ?, ?, ?, ?, ?, ?);', 
                         [
                             req.body.USR_NAME, req.body.USR_LOGINNAME, hash, 
-                            req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
-                            req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY,
-                            req.body.USR_PHOTO
+                            req.body.USRDOC_CPFNUMBER, req.body.USR_PHONENUMBER, 
+                            req.body.USR_DATEBIRTHDAY, req.body.USR_PHOTO
                         ],
                         (error, result, field) => {
                             conn.release();
@@ -106,12 +105,11 @@ exports.updateUsers = (req, res, next) => {
         bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
             if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
             conn.query(
-                'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?)',
                 [
                     req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME,
-                    hash, req.body.USRDOC_CPFNUMBER, req.body.USRDOC_RGNUMBER, 
-                    req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY, 
-                    req.body.USR_PHOTO
+                    hash, req.body.USRDOC_CPFNUMBER, req.body.USR_PHONENUMBER, 
+                    req.body.USR_DATEBIRTHDAY, req.body.USR_PHOTO
                 ],
                 (error, result, field) => {
                     conn.release();
