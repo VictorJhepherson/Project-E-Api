@@ -67,7 +67,11 @@ exports.refresh = (req, res, next) => {
 exports.registerUsers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        conn.query('SELECT USR_LOGINNAME FROM USERS WHERE USR_LOGINNAME = ?', [req.body.USR_LOGINNAME], (error, results) => {
+        conn.query(`SELECT * 
+                      FROM USERS 
+                     INNER JOIN AVATARS 
+                        ON USERS.USR_PHOTO = AVATARS.AVATAR_ID
+                     WHERE USR_LOGINNAME = ?`, [req.body.USR_LOGINNAME], (error, results) => {
             if(error) { return res.status(500).send({ error: error }) }
             if(results.length > 0){
                 res.status(409).send({ mensagem: 'Usuário já cadastrado'})
@@ -89,7 +93,7 @@ exports.registerUsers = (req, res, next) => {
                             return res.status(201).send({
                                 mensagem: 'Usuário criado com sucesso',
                                 token: token, 
-                                data: result[0]
+                                data: results[0]
                             });
                         }
                     );
