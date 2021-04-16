@@ -67,10 +67,8 @@ exports.refresh = (req, res, next) => {
 exports.registerUsers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        conn.query(`SELECT * 
-                      FROM USERS 
-                     INNER JOIN AVATARS 
-                        ON USERS.USR_PHOTO = AVATARS.AVATAR_ID
+        conn.query(`SELECT USR_LOGINNAME
+                      FROM USERS
                      WHERE USR_LOGINNAME = ?`, [req.body.USR_LOGINNAME], (error, results) => {
             if(error) { return res.status(500).send({ error: error }) }
             if(results.length > 0){
@@ -92,8 +90,7 @@ exports.registerUsers = (req, res, next) => {
                             let token = jwt.sign({ USR_LOGINNAME: req.body.USR_LOGINNAME }, process.env.JWT_KEY, {expiresIn: "7d" });  
                             return res.status(201).send({
                                 mensagem: 'Usuário criado com sucesso',
-                                token: token, 
-                                data: results[0]
+                                token: token
                             });
                         }
                     );
