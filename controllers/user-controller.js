@@ -25,7 +25,8 @@ exports.locateBook = (req, res, next) => {
         conn.query(`SELECT BOOK_ID
                       FROM LEASED
                      WHERE USR_ID = ?
-                       AND BOOK_ID = ?`, 
+                       AND BOOK_ID = ?
+                       AND LOC_STATUS = 'l'`, 
         [req.body.user, req.body.BOOK_ID], (error, resultado) => {
             if(resultado.length < 1){
                 conn.query(`CALL VERIFY_LOCATE(?)`, [req.body.user], (error, results) => {
