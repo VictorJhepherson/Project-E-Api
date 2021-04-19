@@ -8,7 +8,7 @@ exports.getBooks = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `CALL GET_BOOKS(?)`;
-        conn.query(query, [ req.body.user ], (error, results, fields) => {
+        conn.query(query, [ req.params.user ], (error, results, fields) => {
             conn.release();
             if(error) { return res.status(500).send({ error: error }) }
             
