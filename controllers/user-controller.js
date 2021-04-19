@@ -79,6 +79,22 @@ exports.getLocates = (req, res, next) => {
     });
 };
 
+exports.verifyFavorites = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error }) }
+        const query = `SELECT COUNT(FAV_ID) 
+                         FROM FAVORITES
+                        WHERE USR_ID = ?
+                          AND BOOK_ID = ?`;
+        conn.query(query, [req.body.user, req.body.BOOK_ID], (error, results, fields) => {
+            conn.release();
+            if(error) { return res.status(500).send({ error: error }) }
+           
+            return res.status(200).send({ data: results });
+        });
+    });
+};
+
 exports.addFavorites = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
