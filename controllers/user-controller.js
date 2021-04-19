@@ -22,20 +22,29 @@ exports.getUserById = (req, res, next) => {
 exports.locateBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        conn.query(`CALL VERIFY_LOCATE(?)`, [req.body.user], (error, results) => {
-            console.log(results[0]);
-            if(results[0].length < 3) {
-                const query = `CALL LOCATE_BOOK(?, ?, ?)`;
-                conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
-                    conn.release();
-                    if(error) { return res.status(500).send({ error: error }) }
-            
-                    return res.status(200).send({ status: 'Livro locado com sucesso' });
-                });
+        conn.query(`SELECT BOOK_ID
+                      FROM LEASED
+                     WHERE USR_ID = ?
+                       AND BOOK_ID = ?`, 
+        [req.body.user, req.body.BOOK_ID], (error, resultado) => {
+            if(resultado.length < 1){
+                conn.query(`CALL VERIFY_LOCATE(?)`, [req.body.user], (error, results) => {
+                    if(results[0].length < 3) {
+                        const query = `CALL LOCATE_BOOK(?, ?, ?)`;
+                        conn.query(query, [req.body.user, req.body.BOOK_ID, req.body.LOC_DATE_RETIRADA], (error, result, fields) => {
+                            conn.release();
+                            if(error) { return res.status(500).send({ error: error }) }
+                    
+                            return res.status(200).send({ status: 'Livro locado com sucesso' });
+                        });
+                    } else {
+                        res.status(409).send({ erro: 1, mensagem: 'Você já realizou 3 locações nos últimos 30 dias desde a primeira locação' })
+                    }
+                })
             } else {
-                res.status(409).send({ mensagem: 'Você já realizou 3 locações nos últimos 30 dias desde a primeira locação' })
+                res.status(409).send({ erro: 2, mensagem: 'Você já possui este livro locado' });
             }
-        })
+        });
     });
 };
 
