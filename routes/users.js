@@ -9,5 +9,7 @@ router.get('/:user', login, UserController.getUserById);
 router.post('/', login, UserController.locateBook);
 router.post('/giveBack', login, UserController.giveBackBook);
 router.get('/getLocates/:user', login, UserController.getLocates);
+router.post('/addFavorite', login, UserController.addFavorites);
+router.post('/removeFavorites', login, UserController.removeFavorites);
 
 module.exports = router;
