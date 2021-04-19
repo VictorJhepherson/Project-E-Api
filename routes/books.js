@@ -30,7 +30,7 @@ const upload = multer({
     fileFilter: fileFilter 
 });
 
-router.get('/:user', login, BookController.getBooks);
+router.post('/getBooks', login, BookController.getBooks);
 router.post('/byGen', login, BookController.getBookByGen);
 router.post('/byName', login, BookController.getBooksByName);
 router.post('/', BookController.insertBook);
