@@ -33,7 +33,7 @@ const upload = multer({
 router.post('/login', LoginController.login);
 router.post('/logout', login, LoginController.logout);
 router.post('/refresh', login, LoginController.refresh);
-router.post('/register', upload.single('USR_PHOTO'), LoginController.registerUsers);
-router.patch('/update', upload.single('USR_PHOTO'), LoginController.updateUsers);
+router.post('/register', LoginController.registerUsers);
+router.patch('/update', login, LoginController.updatePassword);
 
 module.exports = router;

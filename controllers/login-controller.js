@@ -100,18 +100,14 @@ exports.registerUsers = (req, res, next) => {
     });
 };
 
-exports.updateUsers = (req, res, next) => {
+exports.updatePassword = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error}) }
         bcrypt.hash(req.body.USR_PASSWORD, 10, (errBcrypt, hash) => {
             if(errBcrypt){ return res.status(500).send({ error: errBcrypt }) }
             conn.query(
-                'CALL UPDATE_USERS(?, ?, ?, ?, ?, ?, ?, ?)',
-                [
-                    req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME,
-                    hash, req.body.USRDOC_CPFNUMBER, req.body.USR_PHONENUMBER, 
-                    req.body.USR_DATEBIRTHDAY, req.body.USR_PHOTO
-                ],
+                'CALL UPDATE_PASSWORD(?, ?)',
+                [ req.body.USR_ID, hash ],
                 (error, result, field) => {
                     conn.release();
                     if(error) { res.status(500).send({ error: error }) }
