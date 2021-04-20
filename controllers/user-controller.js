@@ -139,7 +139,7 @@ exports.getFavorites = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `SELECT FAVORITES.BOOK_ID,
                               BOOKS.BOOK_NAME,
-                              GENRE.EN_NOME
+                              GENRE.GEN_NOME
                          FROM FAVORITES
                         INNER JOIN BOOKS
                            ON FAVORITES.BOOK_ID = BOOKS.BOOK_ID
