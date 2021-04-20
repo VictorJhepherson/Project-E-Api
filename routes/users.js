@@ -12,5 +12,6 @@ router.get('/getLocates/:user', login, UserController.getLocates);
 router.post('/verifyFavorite', login, UserController.verifyFavorites);
 router.post('/addFavorite', login, UserController.addFavorites);
 router.post('/removeFavorites', login, UserController.removeFavorites);
+router.get('/getFavorites/:user', login, UserController.getFavorites);
 
 module.exports = router;

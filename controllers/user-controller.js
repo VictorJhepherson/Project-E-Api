@@ -133,3 +133,24 @@ exports.removeFavorites = (req, res, next) => {
         });
     });
 };
+
+exports.getFavorites = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error }) }
+        const query = `SELECT FAVORITES.BOOK_ID,
+                              BOOKS.BOOK_NAME,
+                              GENRE.EN_NOME
+                         FROM FAVORITES
+                        INNER JOIN BOOKS
+                           ON FAVORITES.BOOK_ID = BOOKS.BOOK_ID
+                        INNER JOIN GENRE 
+                           ON BOOKS.BOOK_GEN = GENRE.GEN_ID
+                        WHERE FAVORITES.USR_ID = ?`;
+                conn.query(query, [req.params.user], (error, results, fields) => {
+            conn.release();
+            if(error) { return res.status(500).send({ error: error }) }
+            
+            return res.status(200).send({ data: results[0] });
+        });
+    });
+};
