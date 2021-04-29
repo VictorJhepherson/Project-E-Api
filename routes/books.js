@@ -33,9 +33,12 @@ const upload = multer({
 router.get('/:user', login, BookController.getBooks);
 router.post('/byGen', login, BookController.getBookByGen);
 router.post('/byName', login, BookController.getBooksByName);
-router.post('/', BookController.insertBook);
+router.post('/', login, BookController.insertBook);
 router.get('/:BOOK_ID', login, BookController.getBooksById);
 router.patch('/:BOOK_ID', login, BookController.updateBook);
 router.delete('/:BOOK_ID', login, BookController.deleteBook);
+router.post('/locates', login, BookController.getBookLocate);
+router.post('/locatesByUserName', login, BookController.getBookLocateByUserName);
+router.post('/locatesByBookName', login, BookController.getBookLocateByBookName);
 
 module.exports = router;

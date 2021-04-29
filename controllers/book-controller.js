@@ -109,3 +109,42 @@ exports.deleteBook = (req, res, next) => {
         });
     });
 };
+
+exports.getBookLocate = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error }) }
+        const query = `CALL GET_BOOKSLOCATES()`;
+        conn.query(query, (error, results, fields) => {
+            conn.release();
+            if(error) { return res.status(500).send({ error: error }) }
+            
+            return res.status(200).send({ data: results[0] });
+        });
+    });
+};
+
+exports.getBookLocateByUserName = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error }) }
+        const query = `CALL GET_BOOKSLOCATES_BYUSRNAME(?)`;
+        conn.query(query, [req.body.USR_NAME], (error, results, fields) => {
+            conn.release();
+            if(error) { return res.status(500).send({ error: error }) }
+            
+            return res.status(200).send({ data: results[0] });
+        });
+    });
+};
+
+exports.getBookLocateByBookName = (req, res, next) => {
+    mysql.getConnection((error, conn) => {
+        if(error) { return res.status(500).send({ error: error }) }
+        const query = `CALL GET_BOOKSLOCATES_BYBOOKNAME(?)`;
+        conn.query(query, [req.body.BOOK_NAME], (error, results, fields) => {
+            conn.release();
+            if(error) { return res.status(500).send({ error: error }) }
+            
+            return res.status(200).send({ data: results[0] });
+        });
+    });
+};
