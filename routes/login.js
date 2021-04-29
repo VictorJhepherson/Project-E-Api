@@ -35,5 +35,6 @@ router.post('/logout', login, LoginController.logout);
 router.post('/refresh', login, LoginController.refresh);
 router.post('/register', LoginController.registerUsers);
 router.patch('/update', login, LoginController.updatePassword);
+router.patch('/updateData', login, LoginController.updateData);
 
 module.exports = router;
