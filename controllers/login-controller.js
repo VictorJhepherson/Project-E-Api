@@ -125,8 +125,11 @@ exports.updateData = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error}) }
         conn.query(
-            'CALL UPDATE_DATA(?, ?, ?, ?)',
-            [ req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME, req.body.USR_PHONENUMBER ],
+            'CALL UPDATE_DATA(?, ?, ?, ?, ?, ?)',
+            [
+                req.body.USR_ID, req.body.USR_NAME, req.body.USR_LOGINNAME, 
+                req.body.USR_PHONENUMBER, req.body.USR_DATEBIRTHDAY, req.body.USRDOC_CPFNUMBER
+            ],
             (error, result, field) => {
                 conn.release();
                 if(error) { res.status(500).send({ error: error }) }
