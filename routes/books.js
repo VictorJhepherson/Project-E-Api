@@ -37,7 +37,7 @@ router.post('/', login, BookController.insertBook);
 router.get('/:BOOK_ID', login, BookController.getBooksById);
 router.patch('/:BOOK_ID', login, BookController.updateBook);
 router.delete('/:BOOK_ID', login, BookController.deleteBook);
-router.post('/locates', login, BookController.getBookLocate);
+router.get('/locates', login, BookController.getBookLocate);
 router.post('/locatesByUserName', login, BookController.getBookLocateByUserName);
 router.post('/locatesByBookName', login, BookController.getBookLocateByBookName);
 
