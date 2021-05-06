@@ -75,12 +75,12 @@ exports.getBooksById = (req, res, next) => {
 exports.insertBook = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-            const query = `CALL INSERT_BOOKS(?, ?, ?, ?, ?, ?)`;
+            const query = `CALL INSERT_BOOKS(?, ?, ?, ?, ?)`;
             conn.query(query, 
                 [ 
-                    req.body.BOOK_NAME, req.body.BOOK_STATUS,
-                    req.body.BOOK_DESC, req.body.BOOK_GEN,
-                    req.body.BOOK_AUTHOR, req.body.BOOK_PATH
+                    req.body.BOOK_NAME, req.body.BOOK_DESC, 
+                    req.body.BOOK_GEN, req.body.BOOK_AUTHOR, 
+                    req.body.BOOK_PATH
                 ], 
                 (error, results, fields) => {
                 conn.release();
