@@ -139,12 +139,15 @@ exports.getFavorites = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `SELECT FAVORITES.BOOK_ID,
                               BOOKS.BOOK_NAME,
-                              GENRE.GEN_NOME
+                              GENRE.GEN_NOME,
+                              BOOK_IMAGES.IMG_PATH
                          FROM FAVORITES
                         INNER JOIN BOOKS
                            ON FAVORITES.BOOK_ID = BOOKS.BOOK_ID
                         INNER JOIN GENRE 
                            ON BOOKS.BOOK_GEN = GENRE.GEN_ID
+                        INNER JOIN BOOK_IMAGES
+                           ON GENRE.GEN_ID = BOOK_IMAGES.GEN_ID
                         WHERE FAVORITES.USR_ID = ?`;
                 conn.query(query, [req.params.user], (error, results, fields) => {
             conn.release();
