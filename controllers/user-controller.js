@@ -139,6 +139,9 @@ exports.getFavorites = (req, res, next) => {
         if(error) { return res.status(500).send({ error: error }) }
         const query = `SELECT FAVORITES.BOOK_ID,
                               BOOKS.BOOK_NAME,
+                              BOOKS.BOOK_DESC,
+                              BOOKS.BOOK_STATUS,
+                              BOOKS.BOOK_AUTHOR,
                               GENRE.GEN_NOME,
                               BOOK_IMAGES.IMG_PATH
                          FROM FAVORITES
